@@ -14,7 +14,7 @@
       color: #333;
     }
     .container {
-      max-width: 900px;
+      max-width: 600px;
       margin: 40px auto;
       background: #fff;
       border-radius: 10px;
@@ -61,7 +61,8 @@
     /* 테이블 컨테이너 및 스타일 */
     .table-container {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+	  align-items: center;
       gap: 20px;
       flex-wrap: wrap;
     }
@@ -98,6 +99,12 @@
       font-weight: 500;
       color: #333;
     }
+	#results {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;S
+	  width: 100%;
+	}
   </style>
 </head>
 <body>
@@ -218,11 +225,8 @@
         }
         let expectedDisplay = `<div class="result-section"><h2>메모리아 기댓값: ${expected.toFixed(2)} 개</h2></div>`;
         
-        // 두 테이블을 같은 줄에 배치 (flex 컨테이너 사용)
-        let resultsHTML = `<div class="table-container">
-                             <div class="table-wrapper">${singleTable}</div>
-                             <div class="table-wrapper">${unionTable}</div>
-                           </div>`;
+		let resultsHTML = `<div class="table-wrapper">${singleTable}</div>
+						   <div class="table-wrapper">${unionTable}</div>`;
         resultsHTML += expectedDisplay;
         
         document.getElementById('results').innerHTML = resultsHTML;
