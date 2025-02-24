@@ -259,7 +259,7 @@
 		  for (let j = m; j <= pool; j++) {
 			cumulative += unionProbs[j];
 		  }
-		  unionTable += `<tr><td>${m}개</td><td>${(unionProbs[m] * 100).toFixed(2)}%</td><td>${(cumulative * 100).toFixed(2)}%</td></tr>`;
+		  unionTable += `<tr><td>${m}개</td><td>${(unionProbs[m] * 100).toFixed(2)}%</td><td>${(cumulative * 100).toFixed(1)}%</td></tr>`;
 		}
 		unionTable += "</table>";
 
