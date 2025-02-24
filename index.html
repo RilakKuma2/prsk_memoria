@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>메모리아 수급량 계산기</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <style>
+    /* 기본 리셋 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5em;
+      color: #444;
+    }
+    /* 입력란을 한 줄에 배치 */
+    .input-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input-group label {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+    }
+    .input-group input[type='number'],
+    .input-group select {
+      width: 120px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .input-group input[type='number']:focus,
+    .input-group select:focus {
+      border-color: #66a6ff;
+    }
+    /* 테이블 컨테이너 및 스타일 */
+    .table-container {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .table-wrapper {
+      flex: 1 1 300px;
+      max-width: 350px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: center;
+      font-size: 0.95em;
+    }
+    th {
+      background-color: #f4f4f4;
+      font-weight: 500;
+    }
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 15px;
+      font-size: 1.8em;
+      color: #444;
+      text-align: center;
+    }
+    .result-section {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 1.4em;
+      font-weight: 500;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>메모리아 수급량 계산기</h1>
+    
+    <div class="input-row">
+      <div class="input-group">
+        <label for="level">게이트 레벨 (1~40)</label>
+        <input type="number" id="level" value="30" min="1" max="40">
+      </div>
+      <div class="input-group">
+        <label for="pool">총 캐릭터 수</label>
+        <select id="pool">
+          <option value="5">5</option>
+          <option value="6" selected>6</option>
+          <option value="7">7</option>
+        </select>
+      </div>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+      // 팩토리얼 및 조합 계산 함수
+      function factorial(n) {
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+          result *= i;
+        }
+        return result;
+      }
+      
+      function combination(n, k) {
+        if (k < 0 || k > n) return 0;
+        return factorial(n) / (factorial(k) * factorial(n - k));
+      }
+      
+      // 확률 계산 함수: 게이트 레벨에 따른 방문 확률 및 하루 방문(두 번) 시의 메모리아 수급 결과 계산
+      function calculateProbabilities() {
+        const level = parseInt(document.getElementById('level').value);
+        const pool = parseInt(document.getElementById('pool').value);
+        
+        if (isNaN(level) || level < 1 || level > 40) {
+          document.getElementById('results').innerText = "게이트 레벨은 1부터 40 사이의 정수여야 합니다.";
+          return;
+        }
+        if (isNaN(pool) || pool < 5 || pool > 7) {
+          document.getElementById('results').innerText = "총 캐릭터 수는 5부터 7 사이의 정수여야 합니다.";
+          return;
+        }
+        
+        // 게이트 레벨에 따른 한 번 방문 시 확률 (방문자 수: 5,4,3,2)
+        let baseProbs = {};
+        if (level < 30) {
+          baseProbs[5] = level / 100;
+          baseProbs[4] = (10 + level) / 100;
+          baseProbs[3] = 30 / 100;
+          baseProbs[2] = (60 - 2 * level) / 100;
+        } else {
+          baseProbs[5] = level / 100;
+          baseProbs[4] = 40 / 100;
+          baseProbs[3] = (60 - level) / 100;
+          baseProbs[2] = 0;
+        }
+        
+        // 한 번 방문 시 방문자 수는 총 캐릭터 수(pool) 이하인 경우만 사용.
+        const possibleVisits = [2, 3, 4, 5].filter(v => v <= pool);
+        
+        // 방문 확률 테이블 생성 (확률 칸에 % 추가)
+        let singleTable = "<h2>방문 확률</h2>";
+        singleTable += "<table><tr><th>방문자 수</th><th>확률</th></tr>";
+        for (let v of [5, 4, 3, 2]) {
+          if (v <= pool) {
+            singleTable += `<tr><td>${v}명</td><td>${(baseProbs[v] * 100).toFixed(2)}%</td></tr>`;
+          }
+        }
+        singleTable += "</table>";
+        
+        // 하루(두 번 방문) 시 획득 메모리아 및 누적 확률 계산
+        // 등장하는 캐릭터 종류(합집합 크기)는 최소 2명부터 최대 pool명까지 가능.
+        let unionProbs = {};
+        for (let m = 2; m <= pool; m++) {
+          unionProbs[m] = 0;
+        }
+        for (let a of possibleVisits) {
+          for (let b of possibleVisits) {
+            const probAB = baseProbs[a] * baseProbs[b];
+            const minI = Math.max(0, a + b - pool);
+            const maxI = Math.min(a, b);
+            for (let i = minI; i <= maxI; i++) {
+              const unionSize = a + b - i;
+              if (unionSize < 2 || unionSize > pool) continue;
+              const ways = combination(a, i) * combination(pool - a, b - i);
+              const totalWays = combination(pool, b);
+              const probIntersection = ways / totalWays;
+              unionProbs[unionSize] += probAB * probIntersection;
+            }
+          }
+        }
+        
+		let unionTable = "<h2>획득 메모리아 & 누적 확률</h2>";
+		unionTable += "<table><tr><th>획득 메모리아</th><th>확률</th><th>누적 확률</th></tr>";
+		for (let m = 2; m <= pool; m++) {
+		  let cumulative = 0;
+		  for (let j = m; j <= pool; j++) {
+			cumulative += unionProbs[j];
+		  }
+		  unionTable += `<tr><td>${m}개</td><td>${(unionProbs[m] * 100).toFixed(2)}%</td><td>${(cumulative * 100).toFixed(2)}%</td></tr>`;
+		}
+		unionTable += "</table>";
+
+        
+        // 하루 방문한 캐릭터(메모리아)의 기댓값 계산
+        let expected = 0;
+        for (let m = 2; m <= pool; m++) {
+          expected += m * unionProbs[m];
+        }
+        let expectedDisplay = `<div class="result-section"><h2>메모리아 기댓값: ${expected.toFixed(2)} 개</h2></div>`;
+        
+        // 두 테이블을 같은 줄에 배치 (flex 컨테이너 사용)
+        let resultsHTML = `<div class="table-container">
+                             <div class="table-wrapper">${singleTable}</div>
+                             <div class="table-wrapper">${unionTable}</div>
+                           </div>`;
+        resultsHTML += expectedDisplay;
+        
+        document.getElementById('results').innerHTML = resultsHTML;
+      }
+      
+      // 입력값 변경 시 자동 업데이트
+      const inputs = document.querySelectorAll("input, select");
+      inputs.forEach(input => {
+        input.addEventListener("input", calculateProbabilities);
+      });
+      
+      // 페이지 로딩 시 초기 계산
+      calculateProbabilities();
+    </script>
+  </div>
+</body>
+</html>
