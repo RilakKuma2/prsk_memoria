@@ -8,155 +8,84 @@
   <title>메모리아 수급량 계산기</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-        }
-        .container {
-            background: #fff;
-            padding: 2px 1px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        label {
-            display: inline;
-            margin: 15px 0 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input, select {
-            width: 25%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            text-align: center;
-        }
-        h2 {
-            margin-top: 20px;
-            color: #333;
-        }
-        p {
-            font-size: 18px;
-            color: #555;
-            word-break: break-word;
-        }
-        #error-message {
-            color: red;
-            margin-top: 10px;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-evenly;
-            margin-bottom: 20px;
-        }
-        .tab {
-            cursor: pointer;
-            padding: 10px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-			font-size: 15px;
-			font-weight: bold;
-        }
-        .tab.active {
-            background-color: #007bff;
-            color: #fff;
-        }
-		.button-container {
-			display: flex;
-			justify-content: center;
-			margin-top: 0px;
-			flex-wrap: wrap;
-		}
-		.label {
-			white-space: nowrap;
-		}
-        .action-button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 10px;
-			font-size: 14px;
-			font-weight: bold;
-        }
-        .action-button:hover {
-            background-color: #0056b3;
-        }
-        .link-button {
-            background-color: #FFFFFF;
-            color: black;
-            padding: 10px 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 10px;
-			font-size: 14px;
-			font-weight: bold;
-        }	
-        .checkbox-container {
-            display: inline-block;
-            margin-left: 10px;	
-		}
-		#results {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			width: 100%;
-		}
-
-		.table-container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			width: 100%;
-		}
-
-		.table-wrapper {
-			margin: 5px 0;
-			text-align: center;
-		}
-
-		table {
-			border-collapse: collapse;
-			width: auto;
-			min-width: 200px;
-			margin: 1px 0;
-		}
-
-		th, td {
-			border: 1px solid #ccc;
-			padding: 5px 5px;
-			text-align: center;
-			font-size: 14px;
-		}
-
-		th {
-			background-color: #007bff;
-			color: white;
-		}
-			
-    </style>
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f2f5;
+}
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;       /* 최대 높이 제한 추가 */
+  overflow-y: auto;       /* 세로 스크롤 활성화 */
+}
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+label {
+  display: inline-block;
+  margin: 15px 0 5px;
+  font-weight: bold;
+  color: #555;
+}
+input, select {
+  width: 25%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+}
+input[type="checkbox"] {
+  width: auto;
+  margin-left: 10px;
+}
+.info-text {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+h2 {
+  margin-top: 20px;
+  color: #333;
+}
+.table-container, .table-wrapper {
+  margin-top: 20px;
+  text-align: center;
+  max-height: 60vh;       /* 표 영역에 최대 높이 제한 */
+  overflow-y: auto;       /* 표 영역에 세로 스크롤 활성화 */
+}
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  min-width: 200px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 5px 5px;
+  font-size: 14px;
+  text-align: center;
+}
+th {
+  background-color: #007bff;
+  color: #fff;
+}
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>메모리아 수급량 계산기</h1>
-    
     <div class="input-row">
       <div class="input-group">
         <label for="level">게이트 레벨</label>
@@ -170,12 +99,21 @@
           <option value="7">7</option>
         </select>
       </div>
+      <div class="input-group">
+        <label for="worldpass">월드패스</label>
+        <input type="checkbox" id="worldpass">
+        <div class="info-text">한 캐릭터가 항상 방문하며 매일 2번 메모리아 획득 가능</div>
+      </div>
+      <div class="input-group">
+        <label for="allGates">모든 게이트 확률 표기</label>
+        <input type="checkbox" id="allGates">
+      </div>
     </div>
     
     <div id="results"></div>
     
     <script>
-      // 팩토리얼 및 조합 계산 함수
+      // 팩토리얼 및 조합 함수
       function factorial(n) {
         let result = 1;
         for (let i = 2; i <= n; i++) {
@@ -183,16 +121,83 @@
         }
         return result;
       }
-      
       function combination(n, k) {
         if (k < 0 || k > n) return 0;
         return factorial(n) / (factorial(k) * factorial(n - k));
       }
       
-      // 확률 계산 함수: 게이트 레벨에 따른 방문 확률 및 하루 방문(두 번) 시의 메모리아 수급 결과 계산
+      // 주어진 게이트 레벨, 총 캐릭터 수, 월드패스 여부에 따라 획득 메모리아 확률 및 기댓값 계산
+      function calculateProbabilitiesForLevel(level, pool, worldpass) {
+        const effectivePool = worldpass ? pool - 1 : pool;
+        let baseProbs = {};
+        if (worldpass) {
+          if (level < 30) {
+            baseProbs[4] = level / 100;
+            baseProbs[3] = (10 + level) / 100;
+            baseProbs[2] = 30 / 100;
+            baseProbs[1] = (60 - 2 * level) / 100;
+          } else {
+            baseProbs[4] = level / 100;
+            baseProbs[3] = 40 / 100;
+            baseProbs[2] = (60 - level) / 100;
+            baseProbs[1] = 0;
+          }
+        } else {
+          if (level < 30) {
+            baseProbs[5] = level / 100;
+            baseProbs[4] = (10 + level) / 100;
+            baseProbs[3] = 30 / 100;
+            baseProbs[2] = (60 - 2 * level) / 100;
+          } else {
+            baseProbs[5] = level / 100;
+            baseProbs[4] = 40 / 100;
+            baseProbs[3] = (60 - level) / 100;
+            baseProbs[2] = 0;
+          }
+        }
+        
+        // 계산에 사용할 방문자 수 배열 (월드패스일 경우 [4,3,2,1], 아니면 [5,4,3,2])
+        const visitNumbers = worldpass ? [4, 3, 2, 1] : [5, 4, 3, 2];
+        const possibleVisits = visitNumbers.filter(v => v <= effectivePool);
+        
+        // 획득 메모리아 확률 (월드패스이면 최소 1개, 아니면 2개부터)
+        let unionProbs = {};
+        const minUnion = worldpass ? 1 : 2;
+        const maxUnion = effectivePool;
+        for (let m = minUnion; m <= maxUnion; m++) {
+          unionProbs[m] = 0;
+        }
+        for (let a of possibleVisits) {
+          for (let b of possibleVisits) {
+            const probAB = baseProbs[a] * baseProbs[b];
+            const minI = Math.max(0, a + b - effectivePool);
+            const maxI = Math.min(a, b);
+            for (let i = minI; i <= maxI; i++) {
+              const unionSize = a + b - i;
+              if (unionSize < minUnion || unionSize > effectivePool) continue;
+              const ways = combination(a, i) * combination(effectivePool - a, b - i);
+              const totalWays = combination(effectivePool, b);
+              const probIntersection = ways / totalWays;
+              unionProbs[unionSize] += probAB * probIntersection;
+            }
+          }
+        }
+        
+        let expected = 0;
+        for (let m = minUnion; m <= maxUnion; m++) {
+          expected += m * unionProbs[m];
+        }
+        if (worldpass) {
+          expected += 2;
+        }
+        return { unionProbs, expected };
+      }
+      
+      // 기존 모드: 현재 게이트 레벨에 대한 방문 및 획득 확률, 기댓값 표시
       function calculateProbabilities() {
         const level = parseInt(document.getElementById('level').value);
         const pool = parseInt(document.getElementById('pool').value);
+        const worldpass = document.getElementById('worldpass').checked;
         
         if (isNaN(level) || level < 1 || level > 40) {
           document.getElementById('results').innerText = "게이트 레벨은 1부터 40 사이의 정수여야 합니다.";
@@ -203,97 +208,151 @@
           return;
         }
         
-        // 게이트 레벨에 따른 한 번 방문 시 확률 (방문자 수: 5,4,3,2)
+        const effectivePool = worldpass ? pool - 1 : pool;
         let baseProbs = {};
-        if (level < 30) {
-          baseProbs[5] = level / 100;
-          baseProbs[4] = (10 + level) / 100;
-          baseProbs[3] = 30 / 100;
-          baseProbs[2] = (60 - 2 * level) / 100;
+        if (worldpass) {
+          if (level < 30) {
+            baseProbs[4] = level / 100;
+            baseProbs[3] = (10 + level) / 100;
+            baseProbs[2] = 30 / 100;
+            baseProbs[1] = (60 - 2 * level) / 100;
+          } else {
+            baseProbs[4] = level / 100;
+            baseProbs[3] = 40 / 100;
+            baseProbs[2] = (60 - level) / 100;
+            baseProbs[1] = 0;
+          }
         } else {
-          baseProbs[5] = level / 100;
-          baseProbs[4] = 40 / 100;
-          baseProbs[3] = (60 - level) / 100;
-          baseProbs[2] = 0;
-        }
-        
-        // 한 번 방문 시 방문자 수는 총 캐릭터 수(pool) 이하인 경우만 사용.
-        const possibleVisits = [2, 3, 4, 5].filter(v => v <= pool);
-        
-        // 방문 확률 테이블 생성 (확률 칸에 % 추가, 테이블 전치, 헤더 조정)
-        let singleTable = "<h2>방문 확률</h2>";
-        singleTable += "<table><tr>"; // <th> 태그 제거, 첫 행 시작
-        for (let v of [5, 4, 3, 2]) {
-          if (v <= pool) {
-            singleTable += `<th>${v}명</th>`; // th로 변경, 배경색 스타일 적용
+          if (level < 30) {
+            baseProbs[5] = level / 100;
+            baseProbs[4] = (10 + level) / 100;
+            baseProbs[3] = 30 / 100;
+            baseProbs[2] = (60 - 2 * level) / 100;
+          } else {
+            baseProbs[5] = level / 100;
+            baseProbs[4] = 40 / 100;
+            baseProbs[3] = (60 - level) / 100;
+            baseProbs[2] = 0;
           }
         }
-        singleTable += "</tr><tr>"; // 확률 행 시작
-        for (let v of [5, 4, 3, 2]) {
-            if(v <= pool){
-                singleTable += `<td>${(baseProbs[v] * 100).toFixed(0)}%</td>`;
-            }
+        
+        // 방문 확률 테이블 (월드패스인 경우 계산은 4,3,2,1이지만 표기 시 +1하여 5,4,3,2로)
+        const visitNumbers = worldpass ? [4, 3, 2, 1] : [5, 4, 3, 2];
+        const possibleVisits = visitNumbers.filter(v => v <= effectivePool);
+        let singleTable = "<h2>방문 확률</h2><table><tr>";
+        for (let v of visitNumbers) {
+          if (v <= effectivePool) {
+            singleTable += `<th>${v + (worldpass ? 1 : 0)}명</th>`;
+          }
+        }
+        singleTable += "</tr><tr>";
+        for (let v of visitNumbers) {
+          if (v <= effectivePool) {
+            singleTable += `<td>${(baseProbs[v] * 100).toFixed(0)}%</td>`;
+          }
         }
         singleTable += "</tr></table>";
         
-        // 하루(두 번 방문) 시 획득 메모리아 및 누적 확률 계산
-        // 등장하는 캐릭터 종류(합집합 크기)는 최소 2명부터 최대 pool명까지 가능.
+        // 획득 메모리아 및 누적 확률 계산
         let unionProbs = {};
-        for (let m = 2; m <= pool; m++) {
+        const minUnion = worldpass ? 1 : 2;
+        const maxUnion = effectivePool;
+        for (let m = minUnion; m <= maxUnion; m++) {
           unionProbs[m] = 0;
         }
         for (let a of possibleVisits) {
           for (let b of possibleVisits) {
             const probAB = baseProbs[a] * baseProbs[b];
-            const minI = Math.max(0, a + b - pool);
+            const minI = Math.max(0, a + b - effectivePool);
             const maxI = Math.min(a, b);
             for (let i = minI; i <= maxI; i++) {
               const unionSize = a + b - i;
-              if (unionSize < 2 || unionSize > pool) continue;
-              const ways = combination(a, i) * combination(pool - a, b - i);
-              const totalWays = combination(pool, b);
+              if (unionSize < minUnion || unionSize > effectivePool) continue;
+              const ways = combination(a, i) * combination(effectivePool - a, b - i);
+              const totalWays = combination(effectivePool, b);
               const probIntersection = ways / totalWays;
               unionProbs[unionSize] += probAB * probIntersection;
             }
           }
         }
+        let unionTable = "<h2>획득 메모리아 수</h2><table><tr><th>획득 메모리아</th><th>확률</th><th>누적 확률</th></tr>";
+        for (let m = minUnion; m <= effectivePool; m++) {
+          let cumulative = 0;
+          for (let j = m; j <= effectivePool; j++) {
+            cumulative += unionProbs[j];
+          }
+          // 표기 시 획득 메모리아 수에 월드패스이면 +2 적용
+          let displayedCount = worldpass ? m + 2 : m;
+          unionTable += `<tr><td>${displayedCount}개</td><td>${(unionProbs[m] * 100).toFixed(2)}%</td><td>${(cumulative * 100).toFixed(1)}%</td></tr>`;
+        }
+        unionTable += "</table>";
         
-		let unionTable = "<h2>획득 메모리아 수</h2>";
-		unionTable += "<table><tr><th>획득 메모리아</th><th>확률</th><th>누적 확률</th></tr>";
-		for (let m = 2; m <= pool; m++) {
-		  let cumulative = 0;
-		  for (let j = m; j <= pool; j++) {
-			cumulative += unionProbs[j];
-		  }
-		  unionTable += `<tr><td>${m}개</td><td>${(unionProbs[m] * 100).toFixed(2)}%</td><td>${(cumulative * 100).toFixed(1)}%</td></tr>`;
-		}
-		unionTable += "</table>";
-
-        
-        // 하루 방문한 캐릭터(메모리아)의 기댓값 계산
         let expected = 0;
-        for (let m = 2; m <= pool; m++) {
+        for (let m = minUnion; m <= effectivePool; m++) {
           expected += m * unionProbs[m];
         }
+        if (worldpass) { expected += 2; }
         let expectedDisplay = `<div class="result-section"><h2>메모리아 기댓값: ${expected.toFixed(2)} 개</h2></div>`;
         
         let resultsHTML = `<div class="table-container">
                              <div class="table-wrapper">${singleTable}</div>
                              <div class="table-wrapper">${unionTable}</div>
-                           </div>`;
-        resultsHTML += expectedDisplay;
-        
+                           </div>` + expectedDisplay;
         document.getElementById('results').innerHTML = resultsHTML;
       }
       
-      // 입력값 변경 시 자동 업데이트
+      // 모든 게이트 레벨(1~40)에 대해 확률 표를 생성하는 함수
+      function calculateAllLevels() {
+        const pool = parseInt(document.getElementById('pool').value);
+        const worldpass = document.getElementById('worldpass').checked;
+        if (isNaN(pool) || pool < 5 || pool > 7) {
+          document.getElementById('results').innerText = "총 캐릭터 수는 5부터 7 사이의 정수여야 합니다.";
+          return;
+        }
+        const effectivePool = worldpass ? pool - 1 : pool;
+        const minUnion = worldpass ? 1 : 2;
+        let tableHTML = "<table><tr><th>게이트</th>";
+        // 헤더: 각 획득 메모리아 수 (월드패스이면 계산 값에 +2)
+        for (let m = minUnion; m <= effectivePool; m++) {
+          let displayedCount = worldpass ? m + 2 : m;
+          tableHTML += `<th>${displayedCount}개</th>`;
+        }
+        tableHTML += "<th>기댓값</th></tr>";
+        
+        // 1~40레벨에 대해 확률/기댓값 계산
+        for (let level = 1; level <= 40; level++) {
+          let { unionProbs, expected } = calculateProbabilitiesForLevel(level, pool, worldpass);
+          tableHTML += `<tr><td>${level}</td>`;
+          for (let m = minUnion; m <= effectivePool; m++) {
+            let prob = unionProbs[m] || 0;
+            tableHTML += `<td>${(prob * 100).toFixed(2)}%</td>`;
+          }
+          tableHTML += `<td>${expected.toFixed(2)}개</td></tr>`;
+        }
+        tableHTML += "</table>";
+        document.getElementById('results').innerHTML = `<div class="table-wrapper">${tableHTML}</div>`;
+      }
+      
+      // 입력값 변경 시 체크박스 상태에 따라 계산 모드 전환
+      function handleInputChange() {
+        const allGates = document.getElementById('allGates').checked;
+        if (allGates) {
+          document.getElementById('level').disabled = true;
+          calculateAllLevels();
+        } else {
+          document.getElementById('level').disabled = false;
+          calculateProbabilities();
+        }
+      }
+      
+      // 모든 input/select 요소에 대해 이벤트 리스너 등록
       const inputs = document.querySelectorAll("input, select");
       inputs.forEach(input => {
-        input.addEventListener("input", calculateProbabilities);
+        input.addEventListener("input", handleInputChange);
       });
       
-      // 페이지 로딩 시 초기 계산
-      calculateProbabilities();
+      // 초기 계산 실행
+      handleInputChange();
     </script>
   </div>
 </body>
